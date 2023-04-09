@@ -25,5 +25,6 @@ routes.get("/products", ProductController.index);
 
 // forgot password
 routes.post("/forgot_pass", RedefinePassController.forgot);
+routes.post("/reset_pass/:token", RedefinePassController.reset);
 
 export { routes };
