@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { decode, verify } from "jsonwebtoken";
 import { authConfig } from "../configs/authConfig";
 
 export function ensureAuthenticated(
@@ -17,6 +17,8 @@ export function ensureAuthenticated(
 
   try {
     verify(token, authConfig.secret);
+    const { sub } = decode(token);
+    req.userId = sub.toString();
 
     return next();
   } catch (error) {

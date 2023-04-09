@@ -11,7 +11,11 @@ model User {
   id       Int    @id @default(autoincrement())
   name     String
   username String @unique
+  email    String @unique
   password String
+
+  tokenResetPass      String?
+  dateExpirationToken DateTime?
 
   @@map("user")
 }

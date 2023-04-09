@@ -20,10 +20,13 @@ export default {
       const creteUserRequestBody = z.object({
         name: z.string(),
         username: z.string(),
+        email: z.string(),
         password: z.string(),
       });
 
-      const { name, username, password } = creteUserRequestBody.parse(req.body);
+      const { name, username, email, password } = creteUserRequestBody.parse(
+        req.body
+      );
 
       const verifyUser = await prisma.user.findUnique({
         where: {
@@ -35,12 +38,23 @@ export default {
         return res.status(400).json("User already exists");
       }
 
+      const verifyEmail = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      if (verifyEmail) {
+        return res.status(400).json("email already exists");
+      }
+
       const encriptedPass = await encriptPassword(password);
 
       const newUser = await prisma.user.create({
         data: {
           name,
           username,
+          email,
           password: encriptedPass,
         },
       });
@@ -54,14 +68,11 @@ export default {
 
   async user(req: Request, res: Response) {
     try {
-      const viewUserRequestParams = z.object({
-        user_id: z.string(),
-      });
-      const { user_id } = viewUserRequestParams.parse(req.params);
+      const { userId } = req;
 
       const user = await prisma.user.findUnique({
         where: {
-          id: Number(user_id),
+          id: Number(userId),
         },
       });
 

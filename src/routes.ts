@@ -1,5 +1,6 @@
 import { Router } from "express";
 import ProductController from "./controllers/ProductController";
+import RedefinePassController from "./controllers/RedefinePassController";
 import SessionController from "./controllers/SessionController";
 import UserController from "./controllers/UserController";
 import { ensureAuthenticated } from "./middlewares/authentication";
@@ -16,11 +17,13 @@ routes.post("/login", SessionController.create);
 // user
 routes.post("/users", UserController.create);
 routes.get("/users", UserController.index);
-routes.get("/users/:user_id", ensureAuthenticated, UserController.user);
+routes.get("/users/user", ensureAuthenticated, UserController.user);
 
 // product
-routes.post("/products", ProductController.create);
+routes.post("/products", ensureAuthenticated, ProductController.create);
 routes.get("/products", ProductController.index);
 
+// forgot password
+routes.post("/forgot_pass", RedefinePassController.forgot);
 
 export { routes };
