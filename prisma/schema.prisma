@@ -15,3 +15,11 @@ model User {
 
   @@map("user")
 }
+
+model Product {
+  id    Int     @id @default(autoincrement())
+  name  String
+  price Decimal
+
+  @@map("product")
+}
